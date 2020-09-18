@@ -2,20 +2,32 @@
 #include <map>
 #include "PoolInfo.h"
 #include "pool_info/RefPoolInfo.h"
-#include "pool_info/StringPoolInfo.h"
 #include "pool_info/NumberPoolInfo.h"
-#include "pool_info/ClassPoolInfo.h"
+#include "pool_info/OneIndexPoolInfo.h"
 #include "pool_info/Utf8PoolInfo.h"
+#include "pool_info/FloatPoolInfo.h"
+#include "pool_info/MethodHandlePoolInfo.h"
+#include "pool_info/LongPoolInfo.h"
+#include "pool_info/DoublePoolInfo.h"
 
 void fill_tags(std::map<int, PoolInfo*> &tags) {
     tags.insert(std::pair<const int, PoolInfo*>(10, new RefPoolInfo("Methodref")));
     tags.insert(std::pair<const int, PoolInfo*>(11, new RefPoolInfo("InterfaceMethodref")));
     tags.insert(std::pair<const int, PoolInfo*>(9, new RefPoolInfo("Fieldref")));
     tags.insert(std::pair<const int, PoolInfo*>(12, new RefPoolInfo("NameAndType")));
-    tags.insert(std::pair<const int, PoolInfo*>(8, new StringPoolInfo()));
-    tags.insert(std::pair<const int, PoolInfo*>(3, new NumberPoolInfo()));
-    tags.insert(std::pair<const int, PoolInfo*>(7, new ClassPoolInfo()));
+    tags.insert(std::pair<const int, PoolInfo*>(18, new RefPoolInfo("InvokeDynamic")));
+
+    tags.insert(std::pair<const int, PoolInfo*>(7, new OneIndexPoolInfo("Class")));
+    tags.insert(std::pair<const int, PoolInfo*>(16, new OneIndexPoolInfo("MethodType")));
+    tags.insert(std::pair<const int, PoolInfo*>(8, new OneIndexPoolInfo("String")));
+
     tags.insert(std::pair<const int, PoolInfo*>(1, new Utf8PoolInfo()));
+
+    tags.insert(std::pair<const int, PoolInfo*>(4, new FloatPoolInfo()));
+    tags.insert(std::pair<const int, PoolInfo*>(3, new NumberPoolInfo()));
+    tags.insert(std::pair<const int, PoolInfo*>(5, new LongPoolInfo()));
+    tags.insert(std::pair<const int, PoolInfo*>(6, new DoublePoolInfo()));
+    tags.insert(std::pair<const int, PoolInfo*>(15, new MethodHandlePoolInfo()));
 }
 
 int main() {
@@ -29,7 +41,6 @@ int main() {
     fill_tags(tags);
 
     char* first_fields = new char[4];
-    std::fill(first_fields, first_fields + 4, 0);
 
     //read magic number
     fileBuffer.read(first_fields, sizeof(char) * 4);

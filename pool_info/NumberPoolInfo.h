@@ -11,9 +11,12 @@
 class NumberPoolInfo : public PoolInfo {
     void readPrintInfo(std::ifstream &in, int mark, char* fields) {
         in.read(fields, sizeof(char) * 4);
-        int bytes = 16*16*16*(int) fields[0] + 16*16*(int) fields[1] +16*(int) fields[2] + (int) fields[3];
+        int result = int((unsigned char)(fields[0]) << 24 |
+                        (unsigned char)(fields[1]) << 16 |
+                        (unsigned char)(fields[2]) << 8 |
+                        (unsigned char)(fields[3]));
 
-        std::cout << "#" << mark << " = Integer #" << bytes << "\n";
+        std::cout << "#" << mark << " = Integer #" << result << "\n";
     }
 };
 
