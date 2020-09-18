@@ -1,3 +1,0 @@
-C:/Users/User/CLionProjects/javaoptlab1/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/User/CLionProjects/javaoptlab1/cmake-build-debug/CMakeFiles/javaoptlab1.dir
-C:/Users/User/CLionProjects/javaoptlab1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
