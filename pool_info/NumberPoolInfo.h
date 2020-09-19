@@ -16,7 +16,7 @@ class NumberPoolInfo : public PoolInfo {
                         (unsigned char)(fields[2]) << 8 |
                         (unsigned char)(fields[3]));
 
-        std::cout << "#" << mark << " = Integer #" << result << "\n";
+        std::cout << "#" << mark << " = Integer " << result << "\n";
     }
 };
 

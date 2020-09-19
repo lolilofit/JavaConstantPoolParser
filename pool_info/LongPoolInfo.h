@@ -22,11 +22,10 @@ class LongPoolInfo : public PoolInfo {
                              (unsigned char)(fields[2]) << 8 |
                              (unsigned char)(fields[3]));
 
-        long result = (long)high_bytes << 32 | low_bytes & 0xFFFFFFFFL;
+        __int64 result = (__int64)high_bytes << 32 | low_bytes & 0xFFFFFFFFL;
 
         std::cout << "#" << mark << " Long = " << result << "\n";
     }
 };
-
 
 #endif //JAVAOPTLAB1_LONGPOOLINFO_H
