@@ -31,7 +31,7 @@ void fill_tags(std::map<int, PoolInfo*> &tags) {
 }
 
 int main() {
-    std::ifstream fileBuffer(R"(C:\Users\User\CLionProjects\javaoptlab1\Main.class)", std::ios::binary);
+    std::ifstream fileBuffer("../Main.class", std::ios::binary);
 
     if(!fileBuffer.is_open()) {
         return 1;

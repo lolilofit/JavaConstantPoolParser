@@ -28,5 +28,4 @@ class FloatPoolInfo : public PoolInfo{
     }
 };
 
-
 #endif //JAVAOPTLAB1_FLOATPOOLINFO_H
