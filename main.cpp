@@ -30,8 +30,8 @@ void fill_tags(std::map<int, PoolInfo*> &tags) {
     tags.insert(std::pair<const int, PoolInfo*>(15, new MethodHandlePoolInfo()));
 }
 
-int main() {
-    std::ifstream fileBuffer("../Main.class", std::ios::binary);
+int main(int argc, char* argv[]) {
+    std::ifstream fileBuffer(argc == 1 ? "../Main.class" : argv[0], std::ios::binary);
 
     if(!fileBuffer.is_open()) {
         return 1;
@@ -50,7 +50,7 @@ int main() {
     int minor_version = 16*(int) first_fields[0] + (int) first_fields[1];
     int major_version = 16*(int) first_fields[2] + (int) first_fields[3];
 
-    std::cout << "Minor number is: " << minor_version << "\n Major number is: " << major_version << "\n";
+    std::cout << "Minor number is: " << minor_version << "\nMajor number is: " << major_version << "\n";
 
     fileBuffer.read(first_fields, sizeof(char) * 2);
     int constant_pool_count = 16*(int) first_fields[0] + (int) first_fields[1];
