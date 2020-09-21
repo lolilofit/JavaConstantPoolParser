@@ -4,4 +4,4 @@
 
 2. Если необходимо самому собрать проект, то это можно сделать, например, через cmake с указанием подключаемых .cpp файлов в файле CmakeList.txt:
 
-*add_executable(project_name main.cpp PoolInfo.cpp pool_info/RefPoolInfo.cpp pool_info/NumberPoolInfo.cpp pool_info/OneIndexPoolInfo.cpp pool_info/Utf8PoolInfo.cpp pool_info/FloatPoolInfo.cpp pool_info/MethodHandlePoolInfo.cpp pool_info/LongPoolInfo.cpp pool_info/DoublePoolInfo.cpp)*
+  *add_executable(project_name main.cpp PoolInfo.cpp pool_info/RefPoolInfo.cpp pool_info/NumberPoolInfo.cpp pool_info/OneIndexPoolInfo.cpp pool_info/Utf8PoolInfo.cpp pool_info/FloatPoolInfo.cpp pool_info/MethodHandlePoolInfo.cpp pool_info/LongPoolInfo.cpp pool_info/DoublePoolInfo.cpp)*
