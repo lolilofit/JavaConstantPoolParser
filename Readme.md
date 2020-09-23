@@ -5,6 +5,7 @@
 ``` ./javaoptlab1.exe [ClassName.class]```
 
 2. Если необходимо самому собрать проект, то необходимо сделать pull репозитория и собрать помощью cmake.
-``` cmake . 
-    make 
+```
+cmake . 
+make 
 ```
