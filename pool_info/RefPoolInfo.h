@@ -17,7 +17,7 @@ public:
     RefPoolInfo(std::string s) {
         this->methodName = std::move(s);
     }
-    void readPrintInfo(std::ifstream &in, int mark, char* fields);
+    int readPrintInfo(std::ifstream &in, int mark, char* fields);
 };
 
 

@@ -31,7 +31,7 @@ void fill_tags(std::map<int, PoolInfo*> &tags) {
 }
 
 int main(int argc, char* argv[]) {
-    std::ifstream fileBuffer(argc == 1 ? "../Main.class" : argv[0], std::ios::binary);
+    std::ifstream fileBuffer(argc == 1 ? "../Main.class" : argv[1], std::ios::binary);
 
     if(!fileBuffer.is_open()) {
         return 1;
@@ -47,16 +47,17 @@ int main(int argc, char* argv[]) {
 
     //read minor and major version
     fileBuffer.read(first_fields, sizeof(char) * 4);
-    int minor_version = 16*(int) first_fields[0] + (int) first_fields[1];
-    int major_version = 16*(int) first_fields[2] + (int) first_fields[3];
+    int minor_version = (unsigned int) ((unsigned char)(first_fields[0]) << 8u | (unsigned char)(first_fields[1]));
+    int major_version = (unsigned int) ((unsigned char)(first_fields[2]) << 8u | (unsigned char)(first_fields[3]));
 
     std::cout << "Minor number is: " << minor_version << "\nMajor number is: " << major_version << "\n";
 
     fileBuffer.read(first_fields, sizeof(char) * 2);
-    int constant_pool_count = 16*(int) first_fields[0] + (int) first_fields[1];
+    unsigned int constant_pool_count = (unsigned int) ((unsigned char)(first_fields[0]) << 8u | (unsigned char)(first_fields[1]));
 
     //read constant pool
     int tag;
+    int mark = 1;
 
     for(int i = 1; i < constant_pool_count; i++) {
         fileBuffer.read(first_fields, sizeof(char));
@@ -66,7 +67,7 @@ int main(int argc, char* argv[]) {
             return 2;
 
         if(tags.find(tag) != tags.end())
-            tags.at(tag)->readPrintInfo(fileBuffer, i, first_fields);
+            mark += tags.at(tag)->readPrintInfo(fileBuffer, mark, first_fields);
     }
 
     fileBuffer.close();

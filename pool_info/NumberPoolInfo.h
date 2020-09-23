@@ -9,7 +9,7 @@
 #include "../PoolInfo.h"
 
 class NumberPoolInfo : public PoolInfo {
-    void readPrintInfo(std::ifstream &in, int mark, char* fields) {
+    int readPrintInfo(std::ifstream &in, int mark, char* fields) {
         in.read(fields, sizeof(char) * 4);
         int result = int((unsigned char)(fields[0]) << 24 |
                         (unsigned char)(fields[1]) << 16 |
@@ -17,6 +17,7 @@ class NumberPoolInfo : public PoolInfo {
                         (unsigned char)(fields[3]));
 
         std::cout << "#" << mark << " = Integer " << result << "\n";
+        return 1;
     }
 };
 

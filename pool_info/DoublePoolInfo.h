@@ -10,7 +10,7 @@
 #include "../PoolInfo.h"
 
 class DoublePoolInfo : public PoolInfo {
-    void readPrintInfo(std::ifstream &in, int mark, char* fields) {
+    int readPrintInfo(std::ifstream &in, int mark, char* fields) {
         in.read(fields, sizeof(char) * 4);
         int high_bytes = int((unsigned char)(fields[0]) << 24 |
                              (unsigned char)(fields[1]) << 16 |
@@ -31,9 +31,10 @@ class DoublePoolInfo : public PoolInfo {
                  (long_result & 0xfffffffffffffL) << 1 :
                  (long_result & 0xfffffffffffffL) | 0x10000000000000L;
 
-        double long result = (double long)s * (double long)m * std::pow(2.0, (double long)e - 1075.0);
+        //double long result = (double long)s * (double long)m * std::pow(2.0, (double long)e - 1075.0);
 
-        std::cout << "#" << mark << " Double = " << result << "\n";
+        std::cout << "#" << mark << " Double = " << s * m * std::exp2(e - 1075) << "\n";
+        return 2;
     }
 };
 

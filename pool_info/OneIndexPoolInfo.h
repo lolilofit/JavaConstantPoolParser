@@ -18,11 +18,12 @@ public:
         this->method_name = std::move(method_name);
     }
 
-    void readPrintInfo(std::ifstream &in, int mark, char* fields) {
+    int readPrintInfo(std::ifstream &in, int mark, char* fields) {
         in.read(fields, sizeof(char) * 2);
-        int name_index = 16*(int) fields[0] + (int) fields[1];
+        unsigned int name_index = (unsigned int) ((unsigned char)(fields[0]) << 8u | (unsigned char)(fields[1]));
 
         std::cout << "#" << mark << " = " << method_name << " #" << name_index  << "\n";
+        return 1;
     }
 };
 

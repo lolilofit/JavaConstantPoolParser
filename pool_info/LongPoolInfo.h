@@ -9,7 +9,7 @@
 #include "../PoolInfo.h"
 
 class LongPoolInfo : public PoolInfo {
-    void readPrintInfo(std::ifstream &in, int mark, char* fields) {
+    int readPrintInfo(std::ifstream &in, int mark, char* fields) {
         in.read(fields, sizeof(char) * 4);
         int high_bytes = int((unsigned char)(fields[0]) << 24 |
                              (unsigned char)(fields[1]) << 16 |
@@ -25,6 +25,7 @@ class LongPoolInfo : public PoolInfo {
         __int64 result = (__int64)high_bytes << 32 | low_bytes & 0xFFFFFFFFL;
 
         std::cout << "#" << mark << " Long = " << result << "\n";
+        return 2;
     }
 };
 

@@ -9,12 +9,13 @@
 #include "../PoolInfo.h"
 
 class MethodHandlePoolInfo : public PoolInfo {
-    void readPrintInfo(std::ifstream &in, int mark, char* fields) {
+    int readPrintInfo(std::ifstream &in, int mark, char* fields) {
         in.read(fields, sizeof(char) * 3);
         int reference_kind = (int) fields[0];
-        int reference_index = 16*(int) fields[1] + (int) fields[2];
+        unsigned int reference_index = (unsigned int) ((unsigned char)(fields[1]) << 8u | (unsigned char)(fields[2]));
 
         std::cout << "#" << mark << " = MethodHandle #" << reference_kind << ".#" << reference_index << "\n";
+        return 1;
     }
 };
 

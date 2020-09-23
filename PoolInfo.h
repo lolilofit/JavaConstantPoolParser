@@ -11,7 +11,7 @@
 
 class PoolInfo {
 public:
-    virtual void readPrintInfo(std::ifstream &in, int mark, char* fields) {}
+    virtual int readPrintInfo(std::ifstream &in, int mark, char* fields) {}
 };
 
 

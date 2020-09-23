@@ -9,22 +9,23 @@
 #include <cmath>
 #include "../PoolInfo.h"
 
-class FloatPoolInfo : public PoolInfo{
-    void readPrintInfo(std::ifstream &in, int mark, char* fields) {
+class FloatPoolInfo : public PoolInfo {
+    int readPrintInfo(std::ifstream &in, int mark, char* fields) {
         in.read(fields, sizeof(char) * 4);
-        int size = int((unsigned char)(fields[0]) << 24 |
+
+        unsigned int size = (unsigned int)((unsigned char)(fields[0]) << 24 |
                        (unsigned char)(fields[1]) << 16 |
                        (unsigned char)(fields[2]) << 8 |
                        (unsigned char)(fields[3]));
 
         int s = ((size >> 31u) == 0) ? 1 : -1;
-        int e = ((size >> 23u) & 0xffu);
+        int e = ((size >> 23u) & 0xff);
         int m = (e == 0) ?
-                (size & 0x7fffffu) << 1u :
-                (size & 0x7fffffu) | 0x800000u;
+                (size & 0x7fffff) << 1u :
+                (size & 0x7fffff) | 0x800000;
 
-        float result = (float)s * (float)m * (float)std::pow(2.0f, (float)e - 150.0f);
-        std::cout << "#" << mark << " Float " << result << "\n";
+        std::cout << "#" << mark << " Float " << s * m * std::exp2(e - 150) << "\n";
+        return 1;
     }
 };
 
