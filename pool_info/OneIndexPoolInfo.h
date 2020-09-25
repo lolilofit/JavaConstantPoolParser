@@ -13,17 +13,27 @@
 class OneIndexPoolInfo : public PoolInfo {
 public:
     std::string method_name;
+    unsigned int name_index;
 
-    OneIndexPoolInfo(std::string method_name) {
+    OneIndexPoolInfo(std::string method_name, std::map<int, PoolInfo *> *pool) {
         this->method_name = std::move(method_name);
+        m = 1;
+        this->pool = pool;
     }
 
-    int readPrintInfo(std::ifstream &in, int mark, char* fields) {
+    void readInfo(std::ifstream &in, char *fields) {
         in.read(fields, sizeof(char) * 2);
-        unsigned int name_index = (unsigned int) ((unsigned char)(fields[0]) << 8u | (unsigned char)(fields[1]));
+        name_index = (unsigned int) ((unsigned char) (fields[0]) << 8u | (unsigned char) (fields[1]));
+    }
 
-        std::cout << "#" << mark << " = " << method_name << " #" << name_index  << "\n";
-        return 1;
+    void printInfo(int mark) {
+        std::cout << "#" << mark << " " << method_name << " = " << getValue() << "\n";
+    }
+
+    std::string getValue() {
+        std::string class_index_s = pool->at(name_index)->getValue();
+        value = class_index_s;
+        return value;
     }
 };
 

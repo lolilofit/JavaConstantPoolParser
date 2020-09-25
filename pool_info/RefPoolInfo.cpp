@@ -4,11 +4,21 @@
 
 #include "RefPoolInfo.h"
 
-int RefPoolInfo::readPrintInfo(std::ifstream &in, int mark, char *fields) {
+void RefPoolInfo::readInfo(std::ifstream &in, char *fields) {
     in.read(fields, sizeof(char) * 4);
-    unsigned int class_index = (unsigned int) ((unsigned char)(fields[0]) << 8u | (unsigned char)(fields[1]));
-    unsigned int name_and_type_index = (unsigned int) ((unsigned char)(fields[2]) << 8u | (unsigned char)(fields[3]));
+    class_index = (unsigned int) ((unsigned char) (fields[0]) << 8u | (unsigned char) (fields[1]));
+    name_and_type_index = (unsigned int) ((unsigned char) (fields[2]) << 8u | (unsigned char) (fields[3]));
+}
 
-    std::cout << "#" << mark << " = " << methodName << " #" << class_index << ".#" << name_and_type_index << "\n";
-    return 1;
+void RefPoolInfo::printInfo(int mark) {
+    std::cout << "#" << mark << " " << methodName << " = " << getValue() << "\n";
+
+}
+
+std::string RefPoolInfo::getValue() {
+    std::string class_index_s = pool->at(class_index)->getValue();
+    std::string name_and_type_index_s = pool->at(name_and_type_index)->getValue();
+
+    value = class_index_s + ":" + name_and_type_index_s;
+    return value;
 }

@@ -10,7 +10,15 @@
 #include "../PoolInfo.h"
 
 class FloatPoolInfo : public PoolInfo {
-    int readPrintInfo(std::ifstream &in, int mark, char* fields) {
+public:
+    float float_val;
+
+    FloatPoolInfo(std::map<int, PoolInfo*>* pool) {
+        m = 1;
+        this->pool = pool;
+    }
+
+    void readInfo(std::ifstream &in, char* fields) {
         in.read(fields, sizeof(char) * 4);
 
         unsigned int size = (unsigned int)((unsigned char)(fields[0]) << 24 |
@@ -24,8 +32,11 @@ class FloatPoolInfo : public PoolInfo {
                 (size & 0x7fffff) << 1u :
                 (size & 0x7fffff) | 0x800000;
 
-        std::cout << "#" << mark << " Float " << s * m * std::exp2(e - 150) << "\n";
-        return 1;
+        float_val = s * m * std::exp2(e - 150);
+    }
+
+    void printInfo(int mark) {
+        std::cout << "#" << mark << " Float " << float_val << "\n";
     }
 };
 

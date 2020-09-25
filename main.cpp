@@ -10,24 +10,56 @@
 #include "pool_info/LongPoolInfo.h"
 #include "pool_info/DoublePoolInfo.h"
 
-void fill_tags(std::map<int, PoolInfo*> &tags) {
-    tags.insert(std::pair<const int, PoolInfo*>(10, new RefPoolInfo("Methodref")));
-    tags.insert(std::pair<const int, PoolInfo*>(11, new RefPoolInfo("InterfaceMethodref")));
-    tags.insert(std::pair<const int, PoolInfo*>(9, new RefPoolInfo("Fieldref")));
-    tags.insert(std::pair<const int, PoolInfo*>(12, new RefPoolInfo("NameAndType")));
-    tags.insert(std::pair<const int, PoolInfo*>(18, new RefPoolInfo("InvokeDynamic")));
 
-    tags.insert(std::pair<const int, PoolInfo*>(7, new OneIndexPoolInfo("Class")));
-    tags.insert(std::pair<const int, PoolInfo*>(16, new OneIndexPoolInfo("MethodType")));
-    tags.insert(std::pair<const int, PoolInfo*>(8, new OneIndexPoolInfo("String")));
+PoolInfo* getPoolInfo(int tag, std::map<int, PoolInfo*> *pool) {
+    if(tag == 10)
+        return new RefPoolInfo("Methodref", pool);
+    if(tag == 11)
+        return new RefPoolInfo("InterfaceMethodref", pool);
+    if(tag == 9)
+        return new RefPoolInfo("Fieldref", pool);
+    if(tag == 12)
+        return new RefPoolInfo("NameAndType", pool);
+    if(tag == 18)
+        return new RefPoolInfo("InvokeDynamic", pool);
+    if(tag == 7)
+        return new OneIndexPoolInfo("Class", pool);
+    if(tag == 16)
+        return new OneIndexPoolInfo("MethodType", pool);
+    if(tag == 8)
+        return new OneIndexPoolInfo("String", pool);
+    if(tag == 1)
+        return new Utf8PoolInfo(pool);
+    if(tag == 4)
+        return new FloatPoolInfo(pool);
+    if(tag == 3)
+        return new NumberPoolInfo(pool);
+    if(tag == 5)
+        return new LongPoolInfo(pool);
+    if(tag == 6)
+        return new DoublePoolInfo(pool);
+    if(tag == 15)
+        return new MethodHandlePoolInfo(pool);
+    return nullptr;
+        /*
+    tags.insert(std::pair<const int, PoolInfo*>(10, new RefPoolInfo("Methodref", pool)));
+    tags.insert(std::pair<const int, PoolInfo*>(11, new RefPoolInfo("InterfaceMethodref", pool)));
+    tags.insert(std::pair<const int, PoolInfo*>(9, new RefPoolInfo("Fieldref", pool)));
+    tags.insert(std::pair<const int, PoolInfo*>(12, new RefPoolInfo("NameAndType", pool)));
+    tags.insert(std::pair<const int, PoolInfo*>(18, new RefPoolInfo("InvokeDynamic", pool)));
 
-    tags.insert(std::pair<const int, PoolInfo*>(1, new Utf8PoolInfo()));
+    tags.insert(std::pair<const int, PoolInfo*>(7, new OneIndexPoolInfo("Class", pool)));
+    tags.insert(std::pair<const int, PoolInfo*>(16, new OneIndexPoolInfo("MethodType", pool)));
+    tags.insert(std::pair<const int, PoolInfo*>(8, new OneIndexPoolInfo("String", pool)));
 
-    tags.insert(std::pair<const int, PoolInfo*>(4, new FloatPoolInfo()));
-    tags.insert(std::pair<const int, PoolInfo*>(3, new NumberPoolInfo()));
-    tags.insert(std::pair<const int, PoolInfo*>(5, new LongPoolInfo()));
-    tags.insert(std::pair<const int, PoolInfo*>(6, new DoublePoolInfo()));
-    tags.insert(std::pair<const int, PoolInfo*>(15, new MethodHandlePoolInfo()));
+    tags.insert(std::pair<const int, PoolInfo*>(1, new Utf8PoolInfo(pool)));
+
+    tags.insert(std::pair<const int, PoolInfo*>(4, new FloatPoolInfo(pool)));
+    tags.insert(std::pair<const int, PoolInfo*>(3, new NumberPoolInfo(pool)));
+    tags.insert(std::pair<const int, PoolInfo*>(5, new LongPoolInfo(pool)));
+    tags.insert(std::pair<const int, PoolInfo*>(6, new DoublePoolInfo(pool)));
+    tags.insert(std::pair<const int, PoolInfo*>(15, new MethodHandlePoolInfo(pool)));
+         */
 }
 
 int main(int argc, char* argv[]) {
@@ -37,8 +69,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::map<int, PoolInfo*> tags;
-    fill_tags(tags);
+    std::map<int, PoolInfo*> pool;
 
     char* first_fields = new char[4];
 
@@ -58,18 +89,25 @@ int main(int argc, char* argv[]) {
     //read constant pool
     int tag;
     int mark = 1;
+    PoolInfo* poolInfo;
 
-    for(int i = 1; i < constant_pool_count; i++) {
+    while(mark < constant_pool_count) {
         fileBuffer.read(first_fields, sizeof(char));
 
         tag = (int) first_fields[0];
         if(tag < 0)
             return 2;
 
-        if(tags.find(tag) != tags.end())
-            mark += tags.at(tag)->readPrintInfo(fileBuffer, mark, first_fields);
+        poolInfo = getPoolInfo(tag, &pool);
+        poolInfo->readInfo(fileBuffer, first_fields);
+        pool.insert(std::pair<int, PoolInfo*>(mark, poolInfo));
+
+        mark += poolInfo->m;
     }
 
+    for (auto& entry : pool) {
+        entry.second->printInfo(entry.first);
+    }
     fileBuffer.close();
     return 0;
 }

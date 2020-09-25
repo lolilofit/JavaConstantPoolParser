@@ -9,19 +9,29 @@
 #include "../PoolInfo.h"
 
 class Utf8PoolInfo : public PoolInfo {
-    int readPrintInfo(std::ifstream &in, int mark, char* fields) {
-        in.read(fields, sizeof(char) * 2);
-        unsigned int size = (unsigned int) ((unsigned char)(fields[0]) << 8u | (unsigned char)(fields[1]));
-
-        char* bytes = new char[size];
-        in.read(bytes, sizeof(char) * size);
-
-        std::cout << "#" << mark << " = Utf8 ";
-        for(int i = 0; i < size; i++)
-            std::cout << bytes[i];
-        std::cout << "\n";
-        return 1;
+public:
+    Utf8PoolInfo(std::map<int, PoolInfo *> *pool) {
+        m = 1;
+        this->pool = pool;
+        this->value = "";
     }
+
+    void readInfo(std::ifstream &in, char *fields) {
+        in.read(fields, sizeof(char) * 2);
+        int size = (int) ((unsigned char) (fields[0]) << 8u | (unsigned char) (fields[1]));
+
+        char *bytes = new char[size + 1];
+        in.read(bytes, sizeof(char) * size);
+        bytes[size] = '\0';
+
+        value = std::string(bytes);
+    }
+
+    void printInfo(int mark) {
+        std::cout << "#" << mark << " = Utf8 " << value << "\n";
+    }
+
+    std::string getValue() { return value;}
 };
 
 

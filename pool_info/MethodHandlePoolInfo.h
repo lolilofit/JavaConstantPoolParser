@@ -9,13 +9,31 @@
 #include "../PoolInfo.h"
 
 class MethodHandlePoolInfo : public PoolInfo {
-    int readPrintInfo(std::ifstream &in, int mark, char* fields) {
-        in.read(fields, sizeof(char) * 3);
-        int reference_kind = (int) fields[0];
-        unsigned int reference_index = (unsigned int) ((unsigned char)(fields[1]) << 8u | (unsigned char)(fields[2]));
+public:
+    int reference_kind;
+    unsigned int reference_index;
 
-        std::cout << "#" << mark << " = MethodHandle #" << reference_kind << ".#" << reference_index << "\n";
-        return 1;
+    MethodHandlePoolInfo(std::map<int, PoolInfo *> *pool) {
+        m = 1;
+        this->pool = pool;
+    }
+
+    void readInfo(std::ifstream &in, char *fields) {
+        in.read(fields, sizeof(char) * 3);
+        reference_kind = (int) fields[0];
+        reference_index = (unsigned int) ((unsigned char) (fields[1]) << 8u | (unsigned char) (fields[2]));
+    }
+
+    void printInfo(int mark) {
+        std::cout << "#" << mark << " = MethodHandle " << getValue() << "\n";
+    }
+
+    std::string getValue() {
+        std::string ref_kind_s = pool->at(reference_kind)->getValue();
+        std::string ref_ind_s = pool->at(reference_index)->getValue();
+
+        value = ref_kind_s + ":" + ref_ind_s;
+        return value;
     }
 };
 

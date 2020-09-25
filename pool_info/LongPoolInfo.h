@@ -9,7 +9,14 @@
 #include "../PoolInfo.h"
 
 class LongPoolInfo : public PoolInfo {
-    int readPrintInfo(std::ifstream &in, int mark, char* fields) {
+public:
+    __int64 result;
+
+    LongPoolInfo(std::map<int, PoolInfo*>* pool) {
+        m = 2;
+        this->pool = pool;
+    }
+    void readInfo(std::ifstream &in, char* fields) {
         in.read(fields, sizeof(char) * 4);
         int high_bytes = int((unsigned char)(fields[0]) << 24 |
                              (unsigned char)(fields[1]) << 16 |
@@ -22,10 +29,11 @@ class LongPoolInfo : public PoolInfo {
                              (unsigned char)(fields[2]) << 8 |
                              (unsigned char)(fields[3]));
 
-        __int64 result = (__int64)high_bytes << 32 | low_bytes & 0xFFFFFFFFL;
+        result = (__int64)high_bytes << 32 | low_bytes & 0xFFFFFFFFL;
+    }
 
+    void printInfo(int mark) {
         std::cout << "#" << mark << " Long = " << result << "\n";
-        return 2;
     }
 };
 
