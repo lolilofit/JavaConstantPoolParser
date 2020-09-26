@@ -1,3 +1,0 @@
-D:/ClionProjects/javaoptlab1/CMakeFiles/javaoptlab1.dir
-D:/ClionProjects/javaoptlab1/CMakeFiles/ALL_BUILD.dir
-D:/ClionProjects/javaoptlab1/CMakeFiles/ZERO_CHECK.dir
